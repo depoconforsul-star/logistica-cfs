@@ -94,6 +94,7 @@
 <div class="container">
     <div class="header-card">
         <button class="admin-btn" onclick="toggleAdmin()">Acessar Painel</button>
+        <img src="logo.png" alt="Logo Força Sul" class="brand-logo" onerror="this.style.display='none'">
         <div class="header-text">
             <h1>Agendamento Logístico</h1>
             <p>Consórcio Força Sul — Controle Operacional de Caminhão</p>
@@ -171,14 +172,16 @@
         const select = document.getElementById('semana');
         select.innerHTML = '<option value="">Escolher</option>';
         
-        let dataAux = new Date(2026, 10, 23);
-        for(let s = 48; s <= 52; s++) {
+        // CONFIGURADO: Gera semanas de 2026 a partir da Semana 45 (Início em 02/11/2026)
+        let dataAux = new Date(2026, 10, 2);
+        for(let s = 45; s <= 52; s++) {
             let fim = new Date(dataAux); fim.setDate(dataAux.getDate() + 4);
             let txt = `Semana ${s} (2026) - ${dataAux.toLocaleDateString('pt-BR').substring(0,5)} a ${fim.toLocaleDateString('pt-BR').substring(0,5)}`;
             select.options.add(new Option(txt, `SEMANA ${s} (2026)`));
             dataAux.setDate(dataAux.getDate() + 7);
         }
 
+        // Gera todas as 52 semanas de 2027
         dataAux = new Date(2027, 0, 4);
         for(let s = 1; s <= 52; s++) {
             let fim = new Date(dataAux); fim.setDate(dataAux.getDate() + 4);
@@ -234,7 +237,7 @@
         diasSemana.forEach(dia => {
             horariosPadrao.forEach(horario => {
                 const identificadorUnico = `${dia.id} - ${horario}`;
-                const estaOcupado = listaOcupados.includes(identificadorUnico);
+                const estaOcupado = listaOcupados && listaOcupados.includes(identificadorUnico);
 
                 const item = document.createElement('label');
                 item.className = `radio-item ${estaOcupado ? 'occupied' : ''}`;
