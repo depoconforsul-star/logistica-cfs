@@ -280,12 +280,15 @@
                 form.reset();
                 carregarHorariosDisponiveis();
             })
-            .catch(() => {
+                        .catch(() => {
                 alert('Agendamento enviado com sucesso para a planilha!');
                 form.reset();
                 carregarHorariosDisponiveis();
             });
-function toggleAdmin() {
+    }
+
+    function toggleAdmin() {
+
     var senhaDigitada = prompt("Digite a senha de administrador para acessar as configurações:");
     if (senhaDigitada === "161020") {
         var panel = document.getElementById("adminPanel");
