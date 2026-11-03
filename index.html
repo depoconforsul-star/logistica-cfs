@@ -113,6 +113,7 @@
         <input type="text" id="scriptUrl" placeholder="A URL já está configurada internamente" disabled>
     </div>
     <!-- Formulário Principal -->
+       <!-- Formulário Principal Corrigido -->
     <form id="logisticaForm" onsubmit="enviarDados(event)">
         
         <div class="card border-blue">
@@ -164,8 +165,9 @@
     </form>
 </div>
 <script>
-    const SCRIPT_URL = "https://google.com";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwodaQLcKH8eebQgXRgj8vTurs9Tgh-q5tL-wCUiM1LTyULkBWVWU3_AMlMezJ2iLAgGQ/exec";
     const horariosPadrao = ["07:00 - 09:00", "09:00 - 11:00", "12:00 - 14:00", "14:00 - 16:30"];
+
     
     function saveAdmin() {
         localStorage.setItem('scriptUrlLogistica', SCRIPT_URL);
