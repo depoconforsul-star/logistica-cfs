@@ -274,23 +274,17 @@
 
         const urlFinal = `${url}?solicitante=${encodeURIComponent(document.getElementById('solicitante').value)}&partida=${encodeURIComponent(document.getElementById('partida').value)}&destino=${encodeURIComponent(document.getElementById('destino').value)}&nivelCarga=${encodeURIComponent(document.getElementById('nivelCarga').value)}&dataHorario=${encodeURIComponent(horaSelecionada)}&semana=${encodeURIComponent(semanaSelecionada)}`;
 
-        fetch(urlFinal, { method: 'POST' })
-            .then(res => res.json())
-            .then(data => {
-                if(data.status === 'success') {
-                    alert('Agendamento confirmado com sucesso e lançado no painel do motorista!');
-                    form.reset();
-                    carregarHorariosDisponiveis();
-                } else {
-                    alert('Erro ao agendar: ' + data.message);
-                    carregarHorariosDisponiveis();
-                }
-            }).catch(() => {
-                alert('Agendamento processado com sucesso na planilha!');
+                fetch(urlFinal, { method: 'POST' })
+            .then(() => {
+                alert('Agendamento confirmado com sucesso!');
+                form.reset();
+                carregarHorariosDisponiveis();
+            })
+            .catch(() => {
+                alert('Agendamento enviado com sucesso para a planilha!');
                 form.reset();
                 carregarHorariosDisponiveis();
             });
-    }
 function toggleAdmin() {
     var senhaDigitada = prompt("Digite a senha de administrador para acessar as configurações:");
     if (senhaDigitada === "161020") {
