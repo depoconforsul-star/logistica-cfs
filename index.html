@@ -202,7 +202,7 @@
     }
 
     function carregarHorariosDisponiveis() {
-        const url = localStorage.getItem('scriptUrlLogistica');
+       const url = "https://script.google.com/macros/s/AKfycbydWt5qfWotUxB5PU-n5dD-o-mYujREeaGcpMsAVX9Sw8WzbxTeemGs48kV8g3hrf3J/exec";
         const semanaSel = document.getElementById('semana').value;
         const container = document.getElementById('horariosContainer');
 
@@ -264,9 +264,7 @@
 
     function enviarDados(e) {
         e.preventDefault();
-        const url = localStorage.getItem('scriptUrlLogistica');
-        if (!url) return alert("Por favor, configure o link da planilha no Painel Administrativo!");
-
+              const url = "https://script.google.com/macros/s/AKfycbydWt5qfWotUxB5PU-n5dD-o-mYujREeaGcpMsAVX9Sw8WzbxTeemGs48kV8g3hrf3J/exec";
         const form = document.getElementById('logisticaForm');
         const horaSelecionada = form.elements['dataHorario'].value;
         const semanaSelecionada = document.getElementById('semana').value;
