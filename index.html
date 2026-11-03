@@ -99,47 +99,12 @@
             <h1>Agendamento Logístico</h1>
             <p>Consórcio Força Sul — Controle Operacional de Caminhão</p>
             <div style="margin-top: 12px;">
-   <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTTq7MDftjebBy4L16N3thILoJIdbiHwpRbqMOcuJT7fuk0SUvOj62W8zMDI4V_p-zEdzqd5VT5SZTi/pubhtml?gid=1964342553&single=true" target="_blank" style="color: var(--logo-orange); font-weight: bold; text-decoration: underline; font-size: 13px;">
-        Clique aqui para abrir a Agenda em Tempo Real
-    </a>
-</div>
-
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTTq7MDftjebBy4L16N3thILoJIdbiHwpRbqMOcuJT7fuk0SUvOj62W8zMDI4V_p-zEdzqd5VT5SZTi/pubhtml?gid=1964342553&single=true" target="_blank" style="color: var(--logo-orange); font-weight: bold; text-decoration: underline; font-size: 13px;">
+                    Clique aqui para abrir a Agenda em Tempo Real
+                </a>
+            </div>
         </div>
     </div>
-
-    <div id="adminPanel" class="card admin-panel hidden">
-        <h3>Configurações do Administrador</h3>
-        <label>URL do Web App (Google Apps Script):</label>
-        <input type="text" id="scriptUrl" placeholder="Link da implantação /exec" style="margin-bottom: 10px;">
-        <button onclick="saveAdmin()" style="padding: 8px 15px; background: var(--logo-blue); color: white; border: none; border-radius: 4px; cursor: pointer;">Salvar</button>
-    </div>
-
-    <form id="logisticaForm" onsubmit="enviarDados(event)">
-        <div class="card border-blue">
-            <h3>Semana de Referência <span>*</span></h3>
-            <div class="tip-box">💡 Escolha a semana do ano correspondente ao transporte planejado.</div>
-            <select id="semana" onchange="carregarHorariosDisponiveis()" required>
-                <option value="">Escolher</option>
-            </select>
-        </div>
-        <div class="card border-blue">
-            <h3>Solicitante <span>*</span></h3>
-            <div class="tip-box">💡 Informe o nome completo do responsável direto pela solicitação.</div>
-            <input type="text" id="solicitante" placeholder="Ex: Thiago, Maicom, Carlos..." required>
-        </div>
-
-        <div class="card border-orange">
-            <h3>Partida <span>*</span></h3>
-            <div class="tip-box">💡 Digite o ponto ou subárea de carregamento/origem.</div>
-            <input type="text" id="partida" placeholder="Ex: Canteiro, Usina..." required>
-        </div>
-
-        <div class="card border-orange">
-            <h3>Destino <span>*</span></h3>
-            <div class="tip-box">💡 Digite o ponto ou subárea de descarregamento/entrega.</div>
-            <input type="text" id="destino" placeholder="Ex: Restaurante, CMD, Forno 1..." required>
-        </div>
-
         <div class="card border-orange">
             <h3>Nível da Carga <span>*</span></h3>
             <div class="tip-box">💡 Selecione o volume relativo da carga a ser movimentada.</div>
@@ -163,12 +128,15 @@
     </form>
 </div>
 <script>
+    // URL fixa do seu script do Google - Agora integrada diretamente no código!
+    const SCRIPT_URL = "https://google.com";
     const horariosPadrao = ["07:00 - 09:00", "09:00 - 11:00", "12:00 - 14:00", "14:00 - 16:30"];
     
     function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('hidden'); }
     
     function saveAdmin() {
-        localStorage.setItem('scriptUrlLogistica', document.getElementById('scriptUrl').value);
+        // Mantido para compatibilidade, mas o script priorizará a constante global fixa
+        localStorage.setItem('scriptUrlLogistica', SCRIPT_URL);
         alert('URL de integração salva com sucesso!');
         toggleAdmin();
         carregarHorariosDisponiveis();
@@ -196,13 +164,14 @@
             dataAux.setDate(dataAux.getDate() + 7);
         }
         
-        if(localStorage.getItem('scriptUrlLogistica')) {
-            document.getElementById('scriptUrl').value = localStorage.getItem('scriptUrlLogistica');
+        // Preenche o campo administrativo automaticamente com a URL correta fixa
+        if(document.getElementById('scriptUrl')) {
+            document.getElementById('scriptUrl').value = SCRIPT_URL;
         }
     }
-
     function carregarHorariosDisponiveis() {
-        const url = localStorage.getItem('scriptUrlLogistica');
+        // Agora usa a URL fixa global direta do script
+        const url = SCRIPT_URL;
         const semanaSel = document.getElementById('semana').value;
         const container = document.getElementById('horariosContainer');
 
@@ -213,12 +182,8 @@
 
         container.innerHTML = '<span class="loading-text">Consultando horários disponíveis na planilha...</span>';
 
-        if (!url) {
-            renderizarInterfaceHorarios([]);
-            return;
-        }
-
-        fetch(`${url}?semana=${encodeURIComponent(semanaSel)}`)
+        // Garante atualização em tempo real quebrando o cache do navegador com timestamp (&_=...)
+        fetch(`${url}?semana=${encodeURIComponent(semanaSel)}&_=${new Date().getTime()}`)
             .then(res => res.json())
             .then(data => {
                 renderizarInterfaceHorarios(data);
@@ -264,8 +229,7 @@
 
     function enviarDados(e) {
         e.preventDefault();
-        const url = localStorage.getItem('scriptUrlLogistica');
-        if (!url) return alert("Por favor, configure o link da planilha no Painel Administrativo!");
+        const url = SCRIPT_URL;
 
         const form = document.getElementById('logisticaForm');
         const horaSelecionada = form.elements['dataHorario'].value;
@@ -293,15 +257,16 @@
                 carregarHorariosDisponiveis();
             });
     }
-function toggleAdmin() {
-    var senhaDigitada = prompt("Digite a senha de administrador para acessar as configurações:");
-    if (senhaDigitada === "161020") {
-        var panel = document.getElementById("adminPanel");
-        panel.classList.toggle("hidden");
-    } else if (senhaDigitada !== null) {
-        alert("Senha incorreta! Acesso negado.");
+
+    function toggleAdmin() {
+        var senhaDigitada = prompt("Digite a senha de administrador para acessar as configurações:");
+        if (senhaDigitada === "161020") {
+            var panel = document.getElementById("adminPanel");
+            panel.classList.toggle("hidden");
+        } else if (senhaDigitada !== null) {
+            alert("Senha incorreta! Acesso negado.");
+        }
     }
-}
 
     window.onload = gerarSemanas;
 </script>
