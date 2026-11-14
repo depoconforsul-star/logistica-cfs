@@ -99,16 +99,31 @@
             <h1>Agendamento Logístico</h1>
             <p>Consórcio Força Sul — Controle Operacional de Caminhão</p>
                         
-            <div style="margin-top: 12px;">
-                <a href="https://google.com" target="_blank" style="color: var(--logo-orange); font-weight: bold; text-decoration: underline; font-size: 13px;">
-                    Clique aqui para abrir a Agenda em Tempo Real
-                </a>
+            <!-- Bloco com os 4 botões de Agenda em Tempo Real -->
+            <div style="margin-top: 15px;">
+                <p style="margin: 0 0 10px 0; font-size: 13px; font-weight: bold; color: #ffffff; opacity: 0.95;">
+                    📊 CLIQUE ABAIXO PARA ABRIR A AGENDA EM TEMPO REAL:
+                </p>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+                    <a href="https://google.com" target="_blank" style="display: inline-block; background-color: var(--logo-orange); color: white; font-weight: bold; text-decoration: none; font-size: 12px; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;">
+                        🚛 CAM_CFS01GGA
+                    </a>
+                    <a href="https://google.com" target="_blank" style="display: inline-block; background-color: var(--logo-orange); color: white; font-weight: bold; text-decoration: none; font-size: 12px; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;">
+                        🚛 CAM_CFS02GGA
+                    </a>
+                    <a href="https://google.com" target="_blank" style="display: inline-block; background-color: var(--logo-orange); color: white; font-weight: bold; text-decoration: none; font-size: 12px; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;">
+                        Look 🚛 CAM_CFS01M3
+                    </a>
+                    <a href="https://google.com" target="_blank" style="display: inline-block; background-color: var(--logo-orange); color: white; font-weight: bold; text-decoration: none; font-size: 12px; padding: 8px 12px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;">
+                        🚛 CAM_CFS02M3
+                    </a>
+                </div>
             </div>
         </div>
     </div>
     <div style="margin-top: 25px;"></div>
 
-    <!-- Painel Administrativo DESBLOQUEADO para Colar Links -->
+    <!-- Painel Administrativo -->
     <div id="adminPanel" class="card admin-panel hidden">
         <h3>Painel Administrativo</h3>
         <label for="scriptUrl">URL do Google Script:</label>
@@ -144,6 +159,7 @@
                 <option value="">Escolher</option>
             </select>
         </div>
+
         <!-- Campo Inserido: Seleção do Caminhão -->
         <div class="card border-blue">
             <h3>Caminhão Referência <span>*</span></h3>
