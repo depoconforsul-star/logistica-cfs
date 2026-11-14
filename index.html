@@ -108,11 +108,12 @@
     </div>
     <div style="margin-top: 25px;"></div>
 
-    <!-- Painel Administrativo -->
+    <!-- Painel Administrativo DESBLOQUEADO para Colar Links -->
     <div id="adminPanel" class="card admin-panel hidden">
         <h3>Painel Administrativo</h3>
         <label for="scriptUrl">URL do Google Script:</label>
-        <input type="text" id="scriptUrl" placeholder="A URL já está configurada internamente" disabled>
+        <input type="text" id="scriptUrl" placeholder="Cole aqui o link do seu Web App (Google Script)">
+        <button type="button" class="btn-submit" onclick="saveAdmin()" style="margin-top: 10px; padding: 8px; background-color: var(--logo-orange);">Salvar Configuração</button>
     </div>
 
     <!-- Formulário Principal -->
@@ -180,8 +181,21 @@
 </div>
 
 <script>
-    const SCRIPT_URL = "https://google.com";
+    let SCRIPT_URL = localStorage.getItem('scriptUrlLogistica') || "https://google.com";
     const horariosPadrao = ["07:00 - 09:00", "09:00 - 11:00", "12:00 - 14:00", "14:00 - 16:30"];
+
+    function saveAdmin() {
+        const urlDigitada = document.getElementById('scriptUrl').value.trim();
+        if (urlDigitada) {
+            localStorage.setItem('scriptUrlLogistica', urlDigitada);
+            SCRIPT_URL = urlDigitada;
+            alert('URL de integração salva com sucesso!');
+            toggleAdmin();
+            carregarHorariosDisponiveis();
+        } else {
+            alert('Por favor, insira uma URL válida.');
+        }
+    }
 
     function gerarSemanas() {
         const select = document.getElementById('semana');
