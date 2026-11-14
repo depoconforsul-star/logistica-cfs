@@ -100,14 +100,13 @@
             <p>Consórcio Força Sul — Controle Operacional de Caminhão</p>
                         
             <div style="margin-top: 12px;">
-                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTTq7MDftjebBy4L16N3thILoJIdbiHwpRbqMOcuJT7fuk0SUvOj62W8zMDI4V_p-zEdzqd5VT5SZTi/pubhtml?gid=1964342553&single=true" target="_blank" style="color: var(--logo-orange); font-weight: bold; text-decoration: underline; font-size: 13px;">
+                <a href="https://google.com" target="_blank" style="color: var(--logo-orange); font-weight: bold; text-decoration: underline; font-size: 13px;">
                     Clique aqui para abrir a Agenda em Tempo Real
                 </a>
-                       </div>
+            </div>
         </div>
     </div>
     <div style="margin-top: 25px;"></div>
-
 
     <!-- Painel Administrativo -->
     <div id="adminPanel" class="card admin-panel hidden">
@@ -115,8 +114,8 @@
         <label for="scriptUrl">URL do Google Script:</label>
         <input type="text" id="scriptUrl" placeholder="A URL já está configurada internamente" disabled>
     </div>
+
     <!-- Formulário Principal -->
-       <!-- Formulário Principal Corrigido -->
     <form id="logisticaForm" onsubmit="enviarDados(event)">
         
         <div class="card border-blue">
@@ -144,6 +143,18 @@
                 <option value="">Escolher</option>
             </select>
         </div>
+        <!-- Campo Inserido: Seleção do Caminhão -->
+        <div class="card border-blue">
+            <h3>Caminhão Referência <span>*</span></h3>
+            <div class="tip-box">💡 Selecione o caminhão para o qual deseja realizar a reserva.</div>
+            <select id="caminhao" onchange="carregarHorariosDisponiveis()" required>
+                <option value="">Escolher</option>
+                <option value="CAM_CFS01GGA">CAM_CFS01GGA</option>
+                <option value="CAM_CFS02GGA">CAM_CFS02GGA</option>
+                <option value="CAM_CFS01M3">CAM_CFS01M3</option>
+                <option value="CAM_CFS02M3">CAM_CFS02M3</option>
+            </select>
+        </div>
 
         <div class="card border-orange">
             <h3>Nível da Carga <span>*</span></h3>
@@ -160,24 +171,17 @@
             <h3>Data / Horário <span>*</span></h3>
             <div class="tip-box">💡 Selecione a janela operacional desejada. Horários já ocupados ficam bloqueados.</div>
             <div id="horariosContainer" class="radio-group">
-                <span class="loading-text">Selecione uma Semana de Referência para listar os horários...</span>
+                <span class="loading-text">Selecione o Caminhão e a Semana de Referência para listar os horários...</span>
             </div>
         </div>
 
         <button type="submit" class="btn-submit">Confirmar Agendamento de Caminhão</button>
     </form>
 </div>
-<script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwodaQLcKH8eebQgXRgj8vTurs9Tgh-q5tL-wCUiM1LTyULkBWVWU3_AMlMezJ2iLAgGQ/exec";
-    const horariosPadrao = ["07:00 - 09:00", "09:00 - 11:00", "12:00 - 14:00", "14:00 - 16:30"];
 
-    
-    function saveAdmin() {
-        localStorage.setItem('scriptUrlLogistica', SCRIPT_URL);
-        alert('URL de integração salva com sucesso!');
-        toggleAdmin();
-        carregarHorariosDisponiveis();
-    }
+<script>
+    const SCRIPT_URL = "https://google.com";
+    const horariosPadrao = ["07:00 - 09:00", "09:00 - 11:00", "12:00 - 14:00", "14:00 - 16:30"];
 
     function gerarSemanas() {
         const select = document.getElementById('semana');
@@ -207,16 +211,17 @@
     function carregarHorariosDisponiveis() {
         const url = SCRIPT_URL;
         const semanaSel = document.getElementById('semana').value;
+        const caminhaoSel = document.getElementById('caminhao').value;
         const container = document.getElementById('horariosContainer');
 
-        if (!semanaSel) {
-            container.innerHTML = '<span class="loading-text">Selecione uma Semana de Referência para listar os horários...</span>';
+        if (!semanaSel || !caminhaoSel) {
+            container.innerHTML = '<span class="loading-text">Selecione o Caminhão e a Semana de Referência para listar os horários...</span>';
             return;
         }
 
         container.innerHTML = '<span class="loading-text">Consultando horários disponíveis na planilha...</span>';
 
-        fetch(`${url}?semana=${encodeURIComponent(semanaSel)}&_=${new Date().getTime()}`)
+        fetch(`${url}?semana=${encodeURIComponent(semanaSel)}&caminhao=${encodeURIComponent(caminhaoSel)}&_=${new Date().getTime()}`)
             .then(res => res.json())
             .then(data => {
                 renderizarInterfaceHorarios(data);
@@ -267,17 +272,18 @@
         const form = document.getElementById('logisticaForm');
         const horaSelecionada = form.elements['dataHorario'].value;
         const semanaSelecionada = document.getElementById('semana').value;
+        const caminhaoSelecionado = document.getElementById('caminhao').value;
         const container = document.getElementById('horariosContainer');
 
         container.innerHTML = '<span class="loading-text">Salvando agendamento...</span>';
 
-        const urlFinal = `${url}?solicitante=${encodeURIComponent(document.getElementById('solicitante').value)}&partida=${encodeURIComponent(document.getElementById('partida').value)}&destino=${encodeURIComponent(document.getElementById('destino').value)}&nivelCarga=${encodeURIComponent(document.getElementById('nivelCarga').value)}&dataHorario=${encodeURIComponent(horaSelecionada)}&semana=${encodeURIComponent(semanaSelecionada)}`;
+        const urlFinal = `${url}?solicitante=${encodeURIComponent(document.getElementById('solicitante').value)}&partida=${encodeURIComponent(document.getElementById('partida').value)}&destino=${encodeURIComponent(document.getElementById('destino').value)}&nivelCarga=${encodeURIComponent(document.getElementById('nivelCarga').value)}&dataHorario=${encodeURIComponent(horaSelecionada)}&semana=${encodeURIComponent(semanaSelecionada)}&caminhao=${encodeURIComponent(caminhaoSelecionado)}`;
 
         fetch(urlFinal, { method: 'POST' })
             .then(res => res.json())
             .then(data => {
                 if(data.status === 'success') {
-                    alert('Agendamento confirmado com sucesso e lançado no painel do motorista!');
+                    alert('Agendamento confirmado com sucesso!');
                     form.reset();
                     carregarHorariosDisponiveis();
                 } else {
